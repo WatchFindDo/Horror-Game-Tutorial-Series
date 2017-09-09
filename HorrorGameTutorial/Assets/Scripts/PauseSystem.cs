@@ -34,20 +34,18 @@ public class PauseSystem : MonoBehaviour
     {
 		if(Input.GetKeyDown(KeyCode.Escape) && !isPaused)
         {
-            isPaused = true;
-
             PauseGame();
         }
         else if (Input.GetKeyDown(KeyCode.Escape) && isPaused)
         {
-            isPaused = false;
-
             ResumeGame();
         }
     }
 
     public void PauseGame ()
     {
+        isPaused = true;
+
         charController.enabled = false;
         firstPersonController.enabled = false;
         blur.enabled = true;
@@ -58,6 +56,8 @@ public class PauseSystem : MonoBehaviour
 
     public void ResumeGame()
     {
+        isPaused = false;
+
         charController.enabled = true;
         firstPersonController.enabled = true;
         blur.enabled = false;
