@@ -1,18 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityStandardAssets.Characters.FirstPerson;
-using UnityStandardAssets.ImageEffects;
 
 public class PauseSystem : MonoBehaviour
 {
     public static PauseSystem pauseSystem;
 
     private bool isPaused = false;
-    private CharacterController charController;
-    private FirstPersonController firstPersonController;
-    private GameObject firstPersonCharacter;
-    private Blur blur;
 
     [SerializeField] private GameObject pauseMenuHolder;
     [SerializeField] private GameObject settingsHolder;
@@ -20,20 +14,14 @@ public class PauseSystem : MonoBehaviour
 	void Start ()
     {
         pauseSystem = this;
-
-        charController = FindObjectOfType<CharacterController>();
-        firstPersonController = FindObjectOfType<FirstPersonController>();
-
-        firstPersonCharacter = GameObject.Find("FirstPersonCharacter").gameObject;
-        blur = firstPersonCharacter.GetComponent<Blur>();
-
-        LockCursor();
     }
 	
 	void Update ()
     {
 		if(Input.GetKeyDown(KeyCode.Escape) && !isPaused)
         {
+            if (GameManager.gameManager.inGameFunction) return;
+
             PauseGame();
         }
         else if (Input.GetKeyDown(KeyCode.Escape) && isPaused)
@@ -45,11 +33,12 @@ public class PauseSystem : MonoBehaviour
     public void PauseGame ()
     {
         isPaused = true;
+        GameManager.gameManager.inGameFunction = true;
 
-        charController.enabled = false;
-        firstPersonController.enabled = false;
-        blur.enabled = true;
-        UnlockCursor();
+        GameManager.gameManager.UnlockCursor();
+        GameManager.gameManager.EnableBlurEffect();
+        GameManager.gameManager.UpdateMotion(0);
+        GameManager.gameManager.DisableControls();
 
         pauseMenuHolder.SetActive(true);
     }
@@ -57,25 +46,16 @@ public class PauseSystem : MonoBehaviour
     public void ResumeGame()
     {
         isPaused = false;
+        GameManager.gameManager.inGameFunction = false;
 
-        charController.enabled = true;
-        firstPersonController.enabled = true;
-        blur.enabled = false;
-        LockCursor();
+        GameManager.gameManager.LockCursor();
+        GameManager.gameManager.DisableBlurEffect();
+        GameManager.gameManager.UpdateMotion(1);
+        GameManager.gameManager.EnableControls();
 
         pauseMenuHolder.SetActive(false);
         settingsHolder.SetActive(false);
     }
     
-    void LockCursor ()
-    {
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-    }
-
-    void UnlockCursor()
-    {
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
-    }
+    
 }
