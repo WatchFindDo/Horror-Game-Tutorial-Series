@@ -19,7 +19,7 @@ public class InteractionSystem : MonoBehaviour {
 
     void Start ()
     {
-        InvokeRepeating("search", 0f, 0.5f);
+        InvokeRepeating("search", 0f, 0.25f);
 	}
 	
 	void Update ()
@@ -28,21 +28,21 @@ public class InteractionSystem : MonoBehaviour {
         {
             if(interactingObjectName == TagManager.flashlight)
             {
-                Inventory.inventory.AddItem(interactingObjectName);
+                Inventory.inventory.AddItem(interactingObjectName, interactingGameObject);
 
                 clearData();
                 return;
             }
             if (interactingObjectName == TagManager.battery)
             {
-                Inventory.inventory.AddItem(interactingObjectName);
+                Inventory.inventory.AddItem(interactingObjectName, interactingGameObject);
 
                 clearData();
                 return;
             }
             if (interactingObjectName == TagManager.note)
             {
-                Inventory.inventory.AddItem(interactingObjectName);
+                Inventory.inventory.AddItem(interactingObjectName, interactingGameObject);
 
                 clearData();
                 return;
