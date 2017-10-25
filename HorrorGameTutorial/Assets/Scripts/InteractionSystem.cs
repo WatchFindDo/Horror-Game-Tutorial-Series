@@ -7,6 +7,7 @@ public class InteractionSystem : MonoBehaviour {
     //For raycast
     [SerializeField] private Camera mainCam;
     [SerializeField] private float interactDistance = 5.0f;
+    [SerializeField] private Transform rayPos;
 
     private bool canInteract;
 
@@ -19,7 +20,7 @@ public class InteractionSystem : MonoBehaviour {
 
     void Start ()
     {
-        InvokeRepeating("search", 0f, 0.25f);
+        InvokeRepeating("search", 0f, 0.025f);
 	}
 	
 	void Update ()
@@ -55,7 +56,7 @@ public class InteractionSystem : MonoBehaviour {
         RaycastHit hit;
 
         //Checking the distance and the layer of the object
-        if (Physics.Raycast(mainCam.transform.position, mainCam.transform.forward, out hit) && hit.transform.gameObject.layer == LayerMask.NameToLayer("Interactable") && hit.distance <= interactDistance)
+        if (Physics.Raycast(rayPos.position, mainCam.transform.forward, out hit) && hit.transform.gameObject.layer == LayerMask.NameToLayer("Interactable") && hit.distance <= interactDistance)
         {
             resetData();
             canInteract = true;

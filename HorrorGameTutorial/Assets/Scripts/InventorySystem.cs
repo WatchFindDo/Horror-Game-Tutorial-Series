@@ -1,11 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using UnityEngine.UI;
 using UnityEngine;
 
 public class InventorySystem : MonoBehaviour {
 
 	[SerializeField] private GameObject invHolder;
     [SerializeField] private bool usingInv;
+    [SerializeField] private GameObject NoData;
 
     public static InventorySystem invSystem;
 
@@ -34,6 +34,15 @@ public class InventorySystem : MonoBehaviour {
         GameManager.gameManager.inGameFunction = true;
 
         invHolder.SetActive(true);
+
+        if(Inventory.inventory.amountOfItems == 0)
+        {
+            NoData.SetActive(true);
+        }
+        else if (Inventory.inventory.amountOfItems > 0)
+        {
+            NoData.SetActive(false);
+        }
 
         GameManager.gameManager.UnlockCursor();
         GameManager.gameManager.EnableBlurEffect();

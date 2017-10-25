@@ -9,10 +9,20 @@ public class Inventory : MonoBehaviour {
 
     public bool[] items = { false, false };
     public int[] collectables = {0, 0};
+    public int amountOfItems; //Amount of items currently inside the invetory.
 
     [SerializeField] private Text pickUpText;
     public RectTransform[] invSlots;
-    [SerializeField] private GameObject noData;
+
+    [Header("Audio (Pick Up Sounds)")]
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip[] audioClips;
+
+    [Header("Transform's")]
+    [SerializeField] Transform dropPos;
+
+    [Header("Items")]
+    [SerializeField] GameObject[] itemsPickUps;
 
     void Start ()
     {
@@ -45,16 +55,14 @@ public class Inventory : MonoBehaviour {
     private void createData (int item, int amount)
     {
         invSlots[item].gameObject.SetActive(true);
-
+        amountOfItems++;
         slotData data = invSlots[item].GetComponent<slotData>();
 
         data.amount += amount;
         data.amountText.text = "<color=#128CE3FF>Amount:</color> " + data.amount + "x";
 
-        if (noData.activeSelf)
-        {
-            noData.SetActive(false);
-        }
+        audioSource.clip = audioClips[item];
+        audioSource.Play();
     }
 
     private void textAnimation (string ItemID, int amount)
@@ -65,5 +73,17 @@ public class Inventory : MonoBehaviour {
         pickUpText.gameObject.GetComponent<Animation>().Play();
 
         Debug.Log(ItemID + " Added");
+    }
+
+    public void DropItem (int item)
+    {        
+        invSlots[item].gameObject.SetActive(false);
+        amountOfItems--;
+        GameObject _item = Instantiate(itemsPickUps[item], dropPos.position, Quaternion.identity, null);
+        if(_item.GetComponent<Rigidbody>() != null)
+        {
+            _item.GetComponent<Rigidbody>().AddForce(transform.forward * 150f);
+        }
+        InventorySystem.invSystem.HideInv(1);
     }
 }
