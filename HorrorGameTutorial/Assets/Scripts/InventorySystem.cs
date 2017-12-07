@@ -8,10 +8,16 @@ public class InventorySystem : MonoBehaviour {
     [SerializeField] private GameObject NoData;
 
     public static InventorySystem invSystem;
+    private Inventory inv;
 
     void Awake ()
     {
         invSystem = this;
+    }
+
+    void Start ()
+    {
+        inv = Inventory.inventory;
     }
 
 	void Update ()
@@ -35,14 +41,7 @@ public class InventorySystem : MonoBehaviour {
 
         invHolder.SetActive(true);
 
-        if(Inventory.inventory.amountOfItems == 0)
-        {
-            NoData.SetActive(true);
-        }
-        else if (Inventory.inventory.amountOfItems > 0)
-        {
-            NoData.SetActive(false);
-        }
+        CheckItemsCount();
 
         GameManager.gameManager.UnlockCursor();
         GameManager.gameManager.EnableBlurEffect();
@@ -61,5 +60,26 @@ public class InventorySystem : MonoBehaviour {
         GameManager.gameManager.DisableBlurEffect();
         GameManager.gameManager.UpdateMotion(time);
         GameManager.gameManager.EnableControls();
+    }
+
+    public void CheckItemsCount ()
+    {
+        bool noItems = true;
+        for (int i = 0; i < inv.invSlots.Length; i++)
+        {
+            if (inv.invSlots[i].gameObject.activeSelf)
+            {
+                noItems = false;
+            }
+        }
+
+        if (noItems)
+        {
+            NoData.SetActive(true);
+        }
+        else
+        {
+            NoData.SetActive(false);
+        }
     }
 }

@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class Inventory : MonoBehaviour {
@@ -24,18 +22,27 @@ public class Inventory : MonoBehaviour {
     [Header("Items")]
     [SerializeField] GameObject[] itemsPickUps;
 
-    void Start ()
+    [Header("References")]
+    private useFlashlight flashlightScript;
+
+    void Awake ()
     {
         inventory = this;
+    }
+
+    void Start ()
+    {
+        flashlightScript = useFlashlight.instance;
     }
 	
 	public void AddItem (string ItemID, GameObject Object)
     {
         int amount = Object.GetComponent<CheckCount>().amount;
 
-		if(ItemID == TagManager.flashlight) // item 0
+		if (ItemID == TagManager.flashlight) // item 0
         {
             items[0] = true;
+            flashlightScript.CheckStartup();
             createData(0, amount);
         }
         if (ItemID == TagManager.note) // item 1
