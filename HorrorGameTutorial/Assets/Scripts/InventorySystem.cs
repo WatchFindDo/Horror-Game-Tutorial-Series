@@ -3,20 +3,22 @@ using UnityEngine;
 
 public class InventorySystem : MonoBehaviour {
 
-	[SerializeField] private GameObject invHolder;
-    [SerializeField] private bool usingInv;
-    [SerializeField] private GameObject NoData;
+	[SerializeField] private GameObject         invHolder       = null;
+    [SerializeField] private bool               usingInv        = false;
+    [SerializeField] private GameObject         NoData          = null;
 
-    public static InventorySystem invSystem;
-    private Inventory inv;
+    public static InventorySystem               invSystem;
+    private Inventory                           inv;
 
     void Awake ()
     {
+        //Set the singleton.
         invSystem = this;
     }
 
     void Start ()
     {
+        //Set the 'Inventory' reference.
         inv = Inventory.inventory;
     }
 
